@@ -1,0 +1,177 @@
+---
+objects:
+  - endpoint: DADict
+---
+mandatory: True
+question: Welcome
+subquestion: |
+  Welcome! This is an online application that assists the user in filling out legal forms. 
+  
+  **Disclaimer**
+  
+   Consult with a lawyer before filing this form to ensure all information is correct and the correct form is being submitted.
+  
+buttons:
+  - I understand and wish to continue: continue
+  - I do not wish to continue: exit
+    url: http://www.courts.sa.gov.au 
+---
+mandatory: True
+code: |
+  if ZLJfilingcourt == 'Supreme Court':
+    endpoint['Applicable']
+  else:
+    endpoint['Not Applicable']
+---
+mandatory: True
+question: Filing Court
+fields:
+  - Which court does this form need to be completed for: ZLJfilingcourt
+    datatype: radio
+    choices:
+    - Federal Court
+    - Supreme Court
+    - District Court
+    - Magistrates Court
+---
+event: endpoint['Not Applicable']
+question: Not Applicable
+subquestion:
+  We are sorry, this application is only for the completion of SASC Form 1.
+
+buttons:
+  - Exit: exit
+  - Restart: restart
+---
+event: endpoint['Applicable']
+question: Applicable
+subquestion: |
+  # Form 1
+   
+  **FDN**  *(Court generated)*
+ 
+ 
+  **IN THE SUPREME COURT OF SOUTH AUSTRALIA**
+ 
+ 
+  **IN THE CIVIL JURISDICTION**
+ 
+ 
+  **SCCIV 	of**
+  
+  
+  **BETWEEN**
+	
+  ${ ZLJpsalutation + ' ' + ZLJpfirstname + ' ' + ZLJpmiddlename + ' ' + ZLJplastname }
+   
+  Plaintiff
+
+  and
+
+  ${ ZLJdsalutation + ' ' + ZLJdfirstname + ' ' + ZLJdmiddlename + ' ' + ZLJdlastname }
+  
+  Defendant
+
+  **${ ZLJdocumenttype }**
+
+  Filed on behalf of the ${ ZLJroleofparty } ${ ZLJffirstname + ' ' + ZLJfmiddlename + ' ' + ZLJflastname }, by ${ ZLJfsfirstname + ' ' + ZLJfslastname }
+
+  ${ ZLJfpaddress }
+  
+  ${ ZLJfptelephone }
+   
+  ${ZLJfpmobile } 
+   
+  ${ ZLJfpfacismile }
+  
+  ${ ZLJfpdxbox }
+  
+  ${ ZLJfpemail }
+   
+  ${ ZLJfplcode }
+   
+  ${ ZLJfppcode }
+
+  if above address is not the address for service under rule 58, state address for service
+   
+  Settled by ${ ZLJfsfirstname + ' ' + ZLJfslastname }
+   
+  Date and time of filing: ${ today() }
+
+buttons:
+  - This information in incorrect, update information: restart
+  - This information is correct: exit
+  
+---
+mandatory: True
+question: Full name of Plaintiff
+fields:
+  - Salutation: ZLJpsalutation
+    choices:
+      - Dr
+      - Mr
+      - Mrs
+      - Ms
+      - Miss
+  - First Name: ZLJpfirstname
+  - Middle Name: ZLJpmiddlename
+  - Last Name: ZLJplastname
+---
+mandatory: True
+question: Full name of Defendant
+fields:
+  - Salutation: ZLJdsalutation
+    choices:
+      - Dr
+      - Mr
+      - Mrs
+      - Ms
+      - Miss
+  - First Name: ZLJdfirstname
+  - Middle Name: ZLJdmiddlename
+  - Last Name: ZLJdlastname
+---
+mandatory: True
+question: Document Type
+fields: 
+  - Select the type of submitted document: ZLJdocumenttype
+    datatype: radio
+    choices:
+      - Summons
+      - Third Party Notice
+      - Notice Of Appeal
+      - Other
+---
+mandatory: True
+question: Filing
+fields:
+  - Filed on behalf of the: ZLJroleofparty
+    choices:
+    - Plaintiff
+    - Defenant
+---
+mandatory: True
+question: Filing Party Name
+fields:
+    - First Name: ZLJffirstname
+    - Middle Name: ZLJfmiddlename
+    - Last Name: ZLJflastname
+---
+mandatory: True
+question: Filing Solicitor Name
+fields:
+    - First Name: ZLJfsfirstname
+    - Last Name: ZLJfslastname
+---
+mandatory: True
+question: Filing party details
+fields: 
+  - Address: ZLJfpaddress
+  - Telephone: ZLJfptelephone
+  - Mobile: ZLJfpmobile
+  - facismile: ZLJfpfacismile
+  - DX Box: ZLJfpdxbox
+  - Email: ZLJfpemail
+  - L Code: ZLJfplcode
+  - P Code: ZLJfppcode
+--- 
