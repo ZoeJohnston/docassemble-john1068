@@ -1,0 +1,113 @@
+---
+variable name: ZLJpersonalinfo
+use object: True
+data:
+  - First Name: Zoe 
+    Last Name: Johnston-Borrett
+    Age: 20
+    Hobbies: Eating 
+    Do you like pets?: True 
+  - First Name: Melissa   
+    Last Name: Durston
+    Age: 36
+    Hobbies: Working 24/7 
+    Do you like pets?: True
+  - First Name: Nick
+    Last Name: Durston
+    Age: 46
+    Hobbies: House renovating
+    Do I like pets?: True
+  - First Name: Amelie  
+    Last Name: Durston
+    Age: 16 
+    Hobbies: Netball
+    Do you like pets?: True
+  - First Name: Maddison 
+    Last Name: Ashford
+    Age: 17
+    Hobbies: Sleeping 
+    Do you like pets?: True
+  - First Name: Nathan 
+    Last Name: Driffen  
+    Age: 11
+    Hobbies: Roblox 
+    Do you like pets?: True
+---
+mandatory: True
+question: Personal Information Data Table
+subquestion: |
+  Personal information of each family member;
+  
+  ${ ZLJcategory }
+  ${ ZLJdashes }
+  %for ZLJitem in ZLJtablerows:
+  ${ ZLJitem }
+  %endfor
+  
+buttons:
+  - Continue: continue
+---
+code: |
+  ZLJcategory = ""
+  for ZLJitem in ZLJpersonalinfo[0]:
+    ZLJcategory += ZLJitem + '|'
+   
+  ZLJcategory = ZLJcategory[:-1]
+---
+code: |
+  ZLJdashes = "---"
+  for i in range(len(ZLJpersonalinfo[0]) - 1):
+    ZLJdashes += "|---"   
+---
+code: | 
+  ZLJtablerows = []
+  
+  for ZLJitem in ZLJpersonalinfo:
+      
+      ZLJrow = ""
+      for ZLJkey in ZLJitem:
+        ZLJrow += str(ZLJitem[ZLJkey]) + '|'
+      ZLJrow = ZLJrow[:-1]
+      ZLJtablerows.append(ZLJrow)
+---
+mandatory: True
+question: Correction of information
+subquestion: |
+  Correction of personal information for each family member;
+   
+  ${ ZLJcategory }
+  ${ ZLJdashes }
+  %for ZLJitem in ZLJtablerows:
+  ${ ZLJitem }
+  %endfor
+  
+  ${ ZLJquestiontable }
+  
+buttons:
+  - Exit: exit
+  - Restart: restart
+---
+table: ZLJquestiontable
+rows:  ZLJquestions
+columns:
+  - Selected answers: |
+      row_item['ZLJanswers'].true_values()
+---
+variable name: ZLJquestions
+use objects: True
+data:
+  - ZLJquestion: Select all below correct information 
+    ZLJchoices:
+      - First Name
+      - Last Name 
+      - Age 
+      - Hobbies 
+      - Do you like pets 
+---
+question: |
+  ${ ZLJquestions[i]['ZLJquestion'] }
+fields:
+  - no label: ZLJquestions[i]['ZLJanswers']
+    datatype: checkboxes
+    code: ZLJquestions[i]['ZLJchoices']
+---
